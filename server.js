@@ -7,6 +7,20 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware padrão
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Exemplo de rota API
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Backend funcionando!' });
+});
+
+// ⚠️ Rota curinga — devolve index.html em qualquer rota não encontrada
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
 // 📂 Pastas
 const dataDir = path.join(__dirname, 'data');
 const uploadDir = path.join(__dirname, 'public', 'uploads');
@@ -137,6 +151,4 @@ app.post('/comentarios.json/:bookId/:chapterId', (req, res) => {
 });
 
 // 🔹 Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
