@@ -1,0 +1,49 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "The Midnight Library",
+      "author": "Matt Haig",
+      "coverImage": "http://static.photos/education/640x360/1",
+      "description": "Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived.",
+      "chapters": [
+        {
+          "id": "1",
+          "title": "Chapter 1: The Midnight Library",
+          "content": "Nineteen years before she decided to die, Nora Seed sat in the warmth of the small library at Hazeldene School in the town of Bedford...",
+          "publishedAt": "2023-10-05"
+        },
+        {
+          "id": "2",
+          "title": "Chapter 2: The First Life",
+          "content": "Nora opened the first book and found herself in a completely different life...",
+          "publishedAt": "2023-10-12"
+        }
+      ],
+      "createdAt": "2023-01-15"
+    },
+    {
+      "id": "2",
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "coverImage": "http://static.photos/education/640x360/2",
+      "description": "Tiny Changes, Remarkable Results. An easy & proven way to build good habits & break bad ones.",
+      "chapters": [
+        {
+          "id": "3",
+          "title": "Chapter 1: The Surprising Power of Atomic Habits",
+          "content": "Why small habits make a big difference...",
+          "publishedAt": "2023-09-01"
+        }
+      ],
+      "createdAt": "2023-02-20"
+    }
+  ],
+  "ratings": [
+    {
+      "userId": "current-user-id",
+      "bookId": "1",
+      "rating": 4
+    }
+  ]
+}

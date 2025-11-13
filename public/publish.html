@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicar Seu Livro | Refúgio Digital de Livros</title>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Ícones Feather -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    
+    <!-- Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans bg-gray-50">
+
+    <!-- Navbar customizada -->
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-serif font-bold text-gray-800 mb-2">Publicar Seu Livro</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Compartilhe sua história com leitores ao redor do mundo. Nenhum login necessário.
+            </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-serif font-semibold text-gray-800">Detalhes do Livro</h2>
+            </div>
+            <div class="p-6 md:p-8">
+                <form id="publish-form" class="space-y-6" enctype="multipart/form-data">
+                    <form-feedback></form-feedback>
+                    <input type="hidden" name="userId" value="current-user-id">
+
+                    <!-- Título do Livro -->
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Título do Livro</label>
+                        <input type="text" id="title" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Digite o título do seu livro" required>
+                    </div>
+                    
+                    <!-- Subtítulo -->
+                    <div>
+                        <label for="subtitle" class="block text-sm font-medium text-gray-700 mb-1">Subtítulo (opcional)</label>
+                        <input type="text" id="subtitle" name="subtitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Digite um subtítulo">
+                    </div>
+                    
+                    <!-- Nome do Autor -->
+                    <div>
+                        <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Nome do Autor</label>
+                        <input type="text" id="author" name="author" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Seu nome ou pseudônimo" required>
+                    </div>
+                    
+                    <!-- Capa do Livro -->
+                    <div>
+                        <label for="cover" class="block text-sm font-medium text-gray-700 mb-1">Capa do Livro</label>
+                        <div class="mt-1 flex items-center">
+                            <span id="cover-preview" class="inline-block h-32 w-24 rounded-md bg-gray-200 overflow-hidden flex items-center justify-center">
+                                <i data-feather="image" class="text-gray-400"></i>
+                            </span>
+                            <input type="file" id="cover" name="coverImage" accept="image/*" class="ml-5 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Sinopse -->
+                    <div>
+                        <label for="synopsis" class="block text-sm font-medium text-gray-700 mb-1">Sinopse</label>
+                        <textarea id="synopsis" name="synopsis" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Escreva uma breve descrição do seu livro" required></textarea>
+                    </div>
+                    
+                    <!-- Primeiro Capítulo -->
+                    <div class="pt-6 border-t border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Primeiro Capítulo</h3>
+                        <div class="mb-4">
+                            <label for="chapter-title" class="block text-sm font-medium text-gray-700 mb-1">Título do Capítulo</label>
+                            <input type="text" id="chapter-title" name="chapterTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="ex: Capítulo 1: O Começo" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="chapter-content" class="block text-sm font-medium text-gray-700 mb-1">Conteúdo do Capítulo</label>
+                            <textarea id="chapter-content" name="chapterContent" rows="12" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-serif" placeholder="Escreva o conteúdo do capítulo aqui..." required></textarea>
+                        </div>
+                        <div>
+                            <label for="publish-date" class="block text-sm font-medium text-gray-700 mb-1">Data de Publicação</label>
+                            <input type="date" id="publish-date" name="publishDate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 max-w-xs">
+                        </div>
+                    </div>
+                    
+                    <!-- Botões -->
+                    <div class="flex justify-end pt-6 border-t border-gray-200">
+                        <button type="button" id="save-draft" class="bg-white py-3 px-6 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-4">
+                            Salvar Rascunho
+                        </button>
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors inline-flex items-center">
+                            <i data-feather="upload" class="mr-2"></i> Publicar Livro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <!-- Scripts -->
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+   <script>
+feather.replace();
+
+// Preview da capa
+const coverInput = document.getElementById('cover');
+const coverPreview = document.getElementById('cover-preview');
+let selectedFile = null;
+
+coverInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    selectedFile = file || null;
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            coverPreview.innerHTML = `<img src="${reader.result}" alt="Preview da Capa" class="w-full h-full object-cover">`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        coverPreview.innerHTML = `<i data-feather="image" class="text-gray-400"></i>`;
+        feather.replace();
+    }
+});
+
+// Envio do formulário
+const publishForm = document.getElementById('publish-form');
+publishForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    try {
+        // Cria FormData para enviar a capa e os dados do livro
+        const formData = new FormData();
+        formData.append('title', publishForm.title.value.trim());
+        formData.append('author', publishForm.author.value.trim());
+        formData.append('description', publishForm.synopsis.value.trim());
+        if (selectedFile) {
+            formData.append('coverImage', selectedFile);
+        }
+
+        // Envia o livro (com imagem)
+        const bookRes = await fetch('/livros.json', {
+            method: 'POST',
+            body: formData
+        });
+
+        const newBook = await bookRes.json();
+
+        if (!bookRes.ok) {
+            alert('Erro ao publicar livro: ' + (newBook.error || 'Erro desconhecido.'));
+            return;
+        }
+
+        // Envia o primeiro capítulo
+        const chapterData = {
+            title: publishForm.chapterTitle.value.trim(),
+            content: publishForm.chapterContent.value.trim()
+        };
+
+        const chapterRes = await fetch(`/livros.json/${newBook.id}/capitulos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(chapterData)
+        });
+
+        const chapterResponse = await chapterRes.json();
+
+        if (!chapterRes.ok) {
+            alert('Livro salvo, mas erro ao adicionar capítulo.');
+        } else {
+            alert('📚 Livro publicado com sucesso!');
+        }
+
+        // Limpa o formulário
+        publishForm.reset();
+        selectedFile = null;
+        coverPreview.innerHTML = `<i data-feather="image" class="text-gray-400"></i>`;
+        feather.replace();
+
+        // Redireciona
+        window.location.href = 'index.html';
+
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao conectar com o servidor.');
+    }
+});
+
+// Salvar rascunho local
+const saveDraftBtn = document.getElementById('save-draft');
+saveDraftBtn.addEventListener('click', () => {
+    const draft = {
+        title: publishForm.title.value,
+        subtitle: publishForm.subtitle.value,
+        author: publishForm.author.value,
+        synopsis: publishForm.synopsis.value,
+        chapterTitle: publishForm.chapterTitle.value,
+        chapterContent: publishForm.chapterContent.value,
+        publishDate: publishForm.publishDate.value
+    };
+    localStorage.setItem('draftBook', JSON.stringify(draft));
+    alert('Rascunho salvo localmente!');
+});
+
+// Carregar rascunho
+window.addEventListener('DOMContentLoaded', () => {
+    const draft = JSON.parse(localStorage.getItem('draftBook'));
+    if (draft) {
+        publishForm.title.value = draft.title || '';
+        publishForm.subtitle.value = draft.subtitle || '';
+        publishForm.author.value = draft.author || '';
+        publishForm.synopsis.value = draft.synopsis || '';
+        publishForm.chapterTitle.value = draft.chapterTitle || '';
+        publishForm.chapterContent.value = draft.chapterContent || '';
+        publishForm.publishDate.value = draft.publishDate || '';
+    }
+});
+</script>
+
+
+</body>
+</html>
