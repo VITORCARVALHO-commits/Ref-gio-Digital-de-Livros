@@ -3,7 +3,7 @@
 /* --- Fontes --- */
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f9fafb;
+    background-color: #537995;
 }
 
 .font-serif {
@@ -96,36 +96,39 @@ body {
 
 /* --- Animação dos cards de livro --- */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 1; transform: translateY(10); }
+    to { opacity: 10; transform: translateY(400); }
+    
+
 }
 
 .book-card {
     animation: fadeIn 0.2s ease-out forwards;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
 }
 
 .book-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.12);
 }
 
-/* --- Cards de livros no index --- */
+/* --- Cards de livros no index  --- */
 #book-list .book-card {
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: #efecec;
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.10s, box-shadow 0.20s;
 }
 
 #book-list .book-card img {
     width: 100%;
     object-fit: contain; /* Mantém a imagem inteira sem cortar */
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #efecec;
     max-height: 300px;
 }
 
@@ -137,7 +140,7 @@ body {
 }
 
 #book-list .book-card p {
-    color: #6b7280;
+    color: #98999c;
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
 }
@@ -180,13 +183,13 @@ body {
 }
 
 #chapter-list li a:hover {
-    background-color: #eef2ff;
-    color: #4338ca;
+    background-color: #efecec;
+    color: #3f31e2;
 }
 
 /* --- Cards de capítulos no reader --- */
 .chapter-card {
-    background-color: #fff;
+    background-color: #efecec;
     padding: 1rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);

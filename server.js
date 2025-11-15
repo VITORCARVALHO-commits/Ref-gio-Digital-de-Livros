@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 // 📂 Pastas
 const dataDir = path.join(__dirname, 'data');
 const uploadDir = path.join(__dirname, 'public', 'uploads');
+
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -46,8 +47,7 @@ function salvarLivros(livros) {
 
 // 🔹 Listar livros
 app.get('/livros.json', (req, res) => {
-  const livros = lerLivros();
-  res.json(livros);
+  res.json(lerLivros());
 });
 
 // 🔹 Obter livro por ID
@@ -58,7 +58,7 @@ app.get('/livros.json/:id', (req, res) => {
   res.json(livro);
 });
 
-// 🔹 Publicar livro (com capa)
+// 🔹 Publicar livro
 app.post('/livros.json', upload.single('coverImage'), (req, res) => {
   const { title, author, description } = req.body;
   if (!title || !author) return res.status(400).json({ error: 'Título e autor obrigatórios' });
@@ -71,16 +71,17 @@ app.post('/livros.json', upload.single('coverImage'), (req, res) => {
     description: description || '',
     coverImage: req.file ? `/uploads/${req.file.filename}` : null,
     chapters: [],
-    comments: {}, // { chapterId: [ { userName, text, createdAt } ] }
+    comments: {},
     createdAt: new Date().toISOString()
   };
 
   livros.push(novoLivro);
   salvarLivros(livros);
+
   res.status(201).json(novoLivro);
 });
 
-// 🔹 Adicionar capítulo a um livro
+// 🔹 Adicionar capítulo
 app.post('/livros.json/:id/capitulos', (req, res) => {
   const { title, content } = req.body;
   if (!title || !content) return res.status(400).json({ error: 'Título e conteúdo obrigatórios' });
@@ -97,23 +98,22 @@ app.post('/livros.json/:id/capitulos', (req, res) => {
   };
 
   livro.chapters.push(novoCapitulo);
-  livro.comments[novoCapitulo.id] = []; // inicializa comentários
+  livro.comments[novoCapitulo.id] = [];
   salvarLivros(livros);
 
   res.status(201).json(novoCapitulo);
 });
 
-// 🔹 Listar comentários de um capítulo
+// 🔹 Listar comentários
 app.get('/comentarios/:bookId/:chapterId', (req, res) => {
   const livros = lerLivros();
   const livro = livros.find(l => l.id === req.params.bookId);
   if (!livro) return res.status(404).json({ error: 'Livro não encontrado' });
 
-  const comments = livro.comments[req.params.chapterId] || [];
-  res.json(comments);
+  res.json(livro.comments[req.params.chapterId] || []);
 });
 
-// 🔹 Adicionar comentário a um capítulo
+// 🔹 Adicionar comentário
 app.post('/comentarios.json/:bookId/:chapterId', (req, res) => {
   const { userName, text } = req.body;
   if (!text) return res.status(400).json({ error: 'Comentário não pode estar vazio' });
@@ -122,21 +122,22 @@ app.post('/comentarios.json/:bookId/:chapterId', (req, res) => {
   const livro = livros.find(l => l.id === req.params.bookId);
   if (!livro) return res.status(404).json({ error: 'Livro não encontrado' });
 
-  const chapterComments = livro.comments[req.params.chapterId] || [];
-  const novoComentario = {
+  const comentario = {
     userName: userName || 'Anônimo',
     text,
     createdAt: new Date().toISOString()
   };
 
-  chapterComments.push(novoComentario);
-  livro.comments[req.params.chapterId] = chapterComments;
+  if (!livro.comments[req.params.chapterId]) {
+    livro.comments[req.params.chapterId] = [];
+  }
+
+  livro.comments[req.params.chapterId].push(comentario);
   salvarLivros(livros);
 
-  res.status(201).json(novoComentario);
+  res.status(201).json(comentario);
 });
 
 // 🔹 Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));
+// 📚 Código do front-end em public/script.js
