@@ -80,13 +80,11 @@ function createShelfSection(config) {
 }
 
 function bookTile(book) {
-  const locked = book.requiresLogin && !authToken;
   return `
     <div class="book-tile">
       <a class="book-cover-link" href="${getBookLink(book)}" aria-label="Abrir ${book.title}">
         <div class="book-cover">
           <img src="${book.coverImage || 'https://images.unsplash.com/photo-1543002588-d4d28bde5205?w=300&h=400&fit=crop'}" alt="${book.title}">
-          ${locked ? '<div class="book-lock-badge" aria-hidden="true">🔒</div>' : ''}
         </div>
         <div class="book-tile-meta">
           <div class="book-title">${book.title}</div>
