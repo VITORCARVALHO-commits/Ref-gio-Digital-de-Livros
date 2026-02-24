@@ -5,228 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leitor | Refúgio Digital de Livros</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/pages.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body class="font-serif bg-gray-100">
-
-  <custom-reader-header></custom-reader-header>
-
-  <div class="container mx-auto px-4 py-8 max-w-4xl flex">
-
-    <!-- Sidebar -->
-    <div class="hidden md:block w-64 pr-8">
-      <div class="bg-white rounded-lg shadow-md p-4 sticky top-8">
-        <h3 class="font-semibold text-gray-800 mb-3">Sumário</h3>
-        <ul id="chapter-list" class="space-y-2"></ul>
-        <div class="mt-6 pt-4 border-t border-gray-200" id="book-details"></div>
-      </div>
-    </div>
-
-    <!-- Conteúdo Principal -->
-    <div class="flex-1">
-      <div class="bg-white rounded-lg shadow-lg p-8 md:p-12 mb-8">
-        <div class="text-center mb-10">
-          <h1 id="chapter-title" class="text-3xl font-bold text-gray-800 mb-2">Carregando capítulo...</h1>
-          <p id="book-info" class="text-gray-600"></p>
-        </div>
-        <div id="chapter-content" class="prose max-w-none text-gray-700">
-          <p>Carregando conteúdo...</p>
-        </div>
-      </div>
-
-      <div class="flex justify-between mb-8">
-        <button id="prev-chapter" class="flex items-center text-gray-600 hover:text-indigo-600">
-          <i data-feather="chevron-left" class="mr-2"></i> Capítulo Anterior
-        </button>
-        <button id="next-chapter" class="flex items-center text-gray-600 hover:text-indigo-600">
-          Próximo Capítulo <i data-feather="chevron-right" class="ml-2"></i>
-        </button>
-      </div>
-
-      <!-- Comentários -->
-      <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-6">
-          Comentários (<span id="comment-count">0</span>)
-        </h2>
-        <div id="comments-list" class="space-y-6 mb-8"></div>
-
-        <div class="border-t border-gray-200 pt-6">
-          <h3 class="font-medium text-gray-800 mb-4">Deixe um comentário</h3>
-          <form id="comment-form">
-            <textarea name="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4" rows="4" placeholder="Compartilhe seus pensamentos..."></textarea>
-            <input type="text" name="userName" placeholder="Seu nome (opcional)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 mb-4">
-            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
-              Publicar Comentário
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-
+<body class="reader-page">
+  <div class="reader-header">
+    <a href="/" class="font-semibold">← Voltar</a>
+    <h2 id="reader-title">Refúgio Digital de Livros</h2>
+    <button class="dark-mode-toggle" id="darkModeToggle">
+      <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg id="moonIcon" class="is-hidden" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
   </div>
 
-  <custom-footer></custom-footer>
+  <div class="reader-container">
+    <!-- Sumário Lateral -->
+    <div class="sidebar is-hidden">
+      <h3>Capítulos</h3>
+      <ul id="chapter-list" class="chapter-index"></ul>
+    </div>
 
-  <script src="components/navbar.js"></script>
-  <script src="components/footer.js"></script>
-  <script src="components/reader-header.js"></script>
+    <!-- Header do Livro -->
+    <div id="book-header-section" class="book-header is-hidden">
+      <div class="book-cover-reader">
+        <img id="book-cover" src="" alt="">
+      </div>
+      <div class="book-header-info">
+        <h1 id="book-title"></h1>
+        <p id="book-author"></p>
+        <p id="book-description"></p>
+      </div>
+    </div>
 
-  <script src="components/navbar.js"></script>
-  <script src="components/footer.js"></script>
-  <script src="components/reader-header.js"></script>
+    <!-- Cabeçalho do Capítulo -->
+    <div class="chapter-header">
+      <h1 id="chapter-title">Carregando...</h1>
+      <div class="meta">
+        <span id="book-info"></span>
+        <span id="chapter-number"></span>
+      </div>
+    </div>
 
-  <script>
-   feather.replace();
+    <!-- Conteúdo de Leitura -->
+    <div id="chapter-content" class="reading-content">
+      <p>Carregando conteúdo...</p>
+    </div>
 
-// 📌 Captura parâmetros da URL
-const urlParams = new URLSearchParams(window.location.search);
-const bookId = urlParams.get('id');
-let chapterIndex = 0; // índice do capítulo atualmente exibido
+    <!-- Navegação -->
+    <div class="navigation-buttons">
+      <button id="prev-chapter" class="nav-btn">
+        ← Capítulo Anterior
+      </button>
+      <button id="next-chapter" class="nav-btn">
+        Próximo Capítulo →
+      </button>
+    </div>
 
-const chapterList = document.getElementById('chapter-list'); // sumário lateral (opcional)
-const chapterTitle = document.getElementById('chapter-title');
-const chapterContent = document.getElementById('chapter-content');
-const commentsList = document.getElementById('comments-list');
-const commentCount = document.getElementById('comment-count');
-const commentForm = document.getElementById('comment-form');
+    <!-- Comentários -->
+    <section class="comments-section">
+      <h2>Comentários (<span id="comment-count">0</span>)</h2>
+      <div id="comments-list" class="space-y-4 mb-8"></div>
 
-// 🔹 Livro global
-let book = null;
-
-// 🔹 Carregar livro e capítulos
-async function loadBook() {
-  try {
-    const res = await fetch('/livros.json');
-    const livros = await res.json();
-    book = livros.find(l => l.id === bookId);
-
-    if (!book) {
-      chapterTitle.textContent = "Livro não encontrado";
-      return;
-    }
-
-    // 🔹 Renderiza sumário (opcional)
-    chapterList.innerHTML = "";
-    book.chapters.forEach((ch, index) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="#" data-index="${index}" class="text-gray-600 hover:text-indigo-600">${ch.title}</a>`;
-      chapterList.appendChild(li);
-    });
-
-    // Clique no sumário
-    chapterList.querySelectorAll("a").forEach(a => {
-      a.addEventListener("click", e => {
-        e.preventDefault();
-        chapterIndex = Number(a.dataset.index);
-        renderChapter();
-      });
-    });
-
-    // Renderiza o primeiro capítulo (ou o capítulo indicado na URL)
-    const urlCapIndex = Number(urlParams.get('cap'));
-    if (!isNaN(urlCapIndex) && urlCapIndex >= 0 && urlCapIndex < book.chapters.length) {
-      chapterIndex = urlCapIndex;
-    }
-
-    renderChapter();
-  } catch (err) {
-    console.error("Erro ao carregar livro:", err);
-    chapterTitle.textContent = "Erro ao carregar o livro";
-  }
-}
-
-// 🔹 Renderiza capítulo atual + comentários
-function renderChapter() {
-  if (!book || !book.chapters[chapterIndex]) return;
-
-  const ch = book.chapters[chapterIndex];
-  chapterTitle.textContent = ch.title;
-  chapterContent.innerHTML = `<p>${ch.content.replace(/\n/g, "<br>")}</p>`;
-
-  // Atualiza comentários
-  loadComments(ch.id);
-}
-
-// 🔹 Navegação por botões
-document.getElementById("prev-chapter").addEventListener("click", () => {
-  if (chapterIndex > 0) {
-    chapterIndex--;
-    renderChapter();
-  }
-});
-document.getElementById("next-chapter").addEventListener("click", () => {
-  if (book && chapterIndex < book.chapters.length - 1) {
-    chapterIndex++;
-    renderChapter();
-  }
-});
-
-// 🔹 Carregar comentários de um capítulo
-async function loadComments(chapterId) {
-  try {
-    const res = await fetch(`/comentarios/${book.id}/${chapterId}`);
-    const data = await res.json();
-
-    commentsList.innerHTML = "";
-    data.forEach(comment => {
-      const div = document.createElement('div');
-      div.className = "flex space-x-4";
-      div.innerHTML = `
-        <div class="flex-shrink-0">
-          <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-            <i data-feather="user" class="text-gray-500"></i>
+      <div class="comment-form">
+        <h3 class="comment-title">Deixe um comentário</h3>
+        <form id="comment-form">
+          <div class="form-group">
+            <textarea name="text" required rows="4" placeholder="Compartilhe seus pensamentos..."></textarea>
           </div>
-        </div>
-        <div>
-          <div class="flex items-center mb-1">
-            <h4 class="font-medium text-gray-800 mr-2">${comment.userName || 'Anônimo'}</h4>
-            <span class="text-xs text-gray-500">${new Date(comment.createdAt).toLocaleDateString()}</span>
+          <div class="form-group">
+            <input type="text" name="userName" placeholder="Seu nome (opcional)">
           </div>
-          <p class="text-gray-700">${comment.text}</p>
-        </div>
-      `;
-      commentsList.appendChild(div);
-    });
+          <button type="submit" class="submit-btn">Publicar Comentário</button>
+        </form>
+      </div>
+    </section>
+  </div>
 
-    commentCount.textContent = data.length;
-    feather.replace();
-  } catch (err) {
-    console.error("Erro ao carregar comentários:", err);
-  }
-}
-
-// 🔹 Enviar novo comentário
-commentForm.addEventListener("submit", async e => {
-  e.preventDefault();
-  const formData = new FormData(commentForm);
-  const text = formData.get("text");
-  const userName = formData.get("userName") || "Anônimo";
-
-  if (!text.trim()) return alert("Comentário não pode estar vazio.");
-
-  try {
-    const res = await fetch(`/comentarios.json/${book.id}/${book.chapters[chapterIndex].id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, userName })
-    });
-
-    if (!res.ok) throw new Error("Erro ao enviar comentário");
-
-    commentForm.reset();
-    loadComments(book.chapters[chapterIndex].id);
-  } catch (err) {
-    console.error(err);
-    alert("Erro ao enviar comentário.");
-  }
-});
-
-// 🔹 Inicializa
-loadBook();
-
-
-  </script>
+  <script src="js/reader.js"></script>
 </body>
 </html>

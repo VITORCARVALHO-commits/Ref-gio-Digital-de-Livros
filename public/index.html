@@ -1,97 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta name="google-adsense-account" content="ca-pub-2583690523675719">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Refúgio Digital de Livros</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 </head>
-<body class="font-serif bg-gray-50">
-
-  <custom-navbar></custom-navbar>
-
-  <main class="container mx-auto px-4 py-8 max-w-6xl">
-
-    <!-- Header -->
-    <header class="mb-12 text-center">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">Refúgio Digital de Livros</h1>
-      <p class="text-gray-600 max-w-2xl mx-auto">Descubra livros digitais belamente elaborados com uma experiência de leitura imersiva</p>
-    </header>
-
-    <!-- Livros em Destaque -->
-    <section class="mb-16">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Livros em Destaque</h2>
-      <div id="book-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <!-- Livros carregados via JS -->
+<body class="books-app home-page">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"><img class="logo-icon" src="/img/java-icon.png" alt="Java"> <span class="sidebar-brand">Refúgio Digital</span><span class="sidebar-page-title">Início</span></div>
+        <label class="sidebar-search">
+          <span>🔍</span>
+          <input id="book-search" type="search" placeholder="Buscar" aria-label="Buscar livros">
+        </label>
       </div>
-    </section>
 
-    <!-- Capítulos Recentes -->
-    <section class="mb-16">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Capítulos Recentes</h2>
-      <div id="chapters" class="flex overflow-x-auto space-x-6">
-        <!-- Capítulos carregados via JS -->
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Biblioteca</div>
+          <a class="sidebar-item active" href="/"><span class="sidebar-icon"></span>Início</a>
+          <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Minha Biblioteca</a>
+          <a class="sidebar-item" href="/auth.html"><span class="sidebar-icon"></span>Entrar</a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Coleções</div>
+          <button class="sidebar-item sidebar-button" type="button" id="collection-popular"><span class="sidebar-icon"></span>Mais lidos</button>
+          <div id="collections-list"></div>
+          <button class="sidebar-item sidebar-button" type="button" id="collection-new"><span class="sidebar-icon"></span>+ Nova Coleção</button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">✨</div>
+          <div>
+            <div class="sidebar-user-name">Bem-vindo</div>
+            <button class="sidebar-ghost" type="button" id="toggle-theme">Alternar modo</button>
+          </div>
+        </div>
       </div>
-    </section>
+    </aside>
 
-  </main>
+    <main class="content">
+      <div class="mobile-brand" aria-label="Refúgio Digital">
+        <img class="logo-icon" src="/img/java-icon.png" alt="Refúgio Digital">
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menu">☰</button>
+      <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
+      <section class="hero-panel" id="hero-panel">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">Refúgio Digital</div>
+          <h1 class="hero-title" id="hero-title">Descubra histórias incríveis</h1>
+          <p class="hero-subtitle" id="hero-subtitle">Uma biblioteca com livros selecionados para inspirar sua próxima leitura.</p>
+          <div class="hero-actions">
+            <a id="hero-link" class="hero-button" href="/dashboard.html">Minha Biblioteca</a>
+          </div>
+        </div>
+        <div class="hero-cover" id="hero-cover"></div>
+      </section>
 
-  <custom-footer></custom-footer>
+      <div id="shelves" class="shelves"></div>
+    </main>
+  </div>
 
-  <script src="components/navbar.js"></script>
-  <script src="components/footer.js"></script>
-  <script>
-    feather.replace();
-
-    const bookList = document.getElementById('book-list');
-    const chaptersDiv = document.getElementById('chapters');
-
-    fetch('/livros.json')
-      .then(res => res.json())
-      .then(livros => {
-        // 📚 Livros em destaque
-        livros.forEach(l => {
-          const div = document.createElement('div');
-          div.className = 'book-card';
-          div.innerHTML = `
-            <img src="${l.coverImage || 'https://placehold.co/200x300'}" alt="${l.title}" />
-            <h3>${l.title}</h3>
-            <p>${l.author}</p>
-            <a href="reader.html?id=${l.id}" class="text-indigo-600 hover:underline mt-auto">Ler</a>
-          `;
-          bookList.appendChild(div);
-        });
-
-        // 📖 Últimos capítulos
-        let allChapters = [];
-        livros.forEach(l => {
-          l.chapters.forEach(c => allChapters.push({
-            bookId: l.id,
-            bookTitle: l.title,
-            chapterId: c.id,
-            title: c.title,
-            createdAt: c.createdAt || l.createdAt
-          }));
-        });
-
-        allChapters.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        allChapters.slice(0, 5).forEach(c => {
-          const div = document.createElement('div');
-          div.className = 'chapter-card min-w-[220px] flex flex-col';
-          div.innerHTML = `
-            <h4 class="font-semibold mb-1">${c.title}</h4>
-            <p class="text-gray-600 text-sm mb-2">de ${c.bookTitle}</p>
-            <a href="reader.html?id=${c.bookId}&cap=${c.chapterId}" class="text-indigo-600 hover:underline mt-auto">Ler capítulo</a>
-          `;
-          chaptersDiv.appendChild(div);
-        });
-      })
-      .catch(err => console.error('Erro ao carregar dados:', err));
-  </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2583690523675719"
-     crossorigin="anonymous"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lendo | Refúgio Digital de Livros</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="reading-page">
+  <div class="reading-container">
+    <a class="back-home" href="/index.html" aria-label="Voltar para a página inicial">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <!-- Header -->
+    <div class="reading-header">
+      <div class="reading-header-left">
+        <a href="/dashboard.html">← Voltar</a>
+        <span class="book-title" id="bookTitle">Carregando...</span>
+      </div>
+      <div class="reading-header-right">
+        <div class="reading-controls">
+          <button class="control-btn" id="tocBtn">📖 Índice</button>
+          <button class="control-btn bookmark-btn" id="bookmarkBtn">🔖</button>
+          <button class="control-btn" id="fontBtn">Aa</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="reading-content">
+      <div class="reading-layout">
+        <div class="reading-book">
+          <div class="book-pages" id="bookPages">
+            <div class="page page-left">
+              <div class="page-content" id="pageLeft">
+                <p>Carregando...</p>
+              </div>
+              <div class="page-curl left"></div>
+              <div class="page-number" id="pageNumLeft">1</div>
+            </div>
+            <div class="page page-right">
+              <div class="page-content" id="pageRight">
+                <p>Carregando...</p>
+              </div>
+              <div class="page-curl right"></div>
+              <div class="page-number" id="pageNumRight">2</div>
+            </div>
+            <div class="flip-sheet" id="flipSheet" aria-hidden="true">
+              <div class="flip-face flip-front" id="flipFront"></div>
+              <div class="flip-face flip-back" id="flipBack"></div>
+            </div>
+          </div>
+        </div>
+        <aside class="reading-notes">
+          <h3>Anotações</h3>
+          <textarea id="notesText" class="notes-textarea" placeholder="Escreva suas anotações aqui..."></textarea>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="reading-footer">
+      <button class="page-btn" id="prevBtn" disabled>← Página Anterior</button>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="reading-info">
+        <span id="pageInfo">1-2</span>
+      </div>
+      <button class="page-btn" id="nextBtn">Próxima Página →</button>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <h3>Índice</h3>
+      <ul class="table-of-contents" id="toc"></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+  </div>
+
+  <script src="js/ler.js"></script>
+</body>
+</html>

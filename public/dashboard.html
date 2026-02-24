@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca | Refúgio Digital de Livros</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="books-app">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"><img class="logo-icon" src="/img/java-icon.png" alt="Java"> Refúgio Digital</div>
+        <label class="sidebar-search">
+          <span>🔍</span>
+          <input id="book-search" type="search" placeholder="Buscar" aria-label="Buscar livros">
+        </label>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Biblioteca</div>
+          <a class="sidebar-item active" href="/dashboard.html"><span class="sidebar-icon"></span>Início</a>
+          <a class="sidebar-item" href="/"><span class="sidebar-icon"></span>Loja de Livros</a>
+          <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Quero Ler</a>
+          <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Concluídos</a>
+          <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Audiolivros</a>
+          <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>PDFs</a>
+          <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Minhas Amostras</a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Minhas Coleções</div>
+          <button class="sidebar-item sidebar-button" type="button" id="collection-popular"><span class="sidebar-icon"></span>Mais lidos</button>
+          <div id="collections-list"></div>
+          <button class="sidebar-item sidebar-button" type="button" id="collection-new"><span class="sidebar-icon"></span>+ Nova Coleção</button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">👤</div>
+          <div>
+            <div class="sidebar-user-name" id="userName">Leitor</div>
+            <button class="sidebar-ghost" type="button" id="toggle-theme">Alternar modo</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="hero-panel" id="hero-panel">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">Sugestão do dia</div>
+          <h1 class="hero-title" id="hero-title">Sua próxima leitura começa aqui</h1>
+          <p class="hero-subtitle" id="hero-subtitle">Explore obras escolhidas para você.</p>
+          <div class="hero-actions">
+            <a id="hero-link" class="hero-button" href="/">Descobrir livros</a>
+          </div>
+        </div>
+        <div class="hero-cover" id="hero-cover"></div>
+      </section>
+
+      <section class="reading-goal">
+        <div>
+          <h2>Metas de leitura</h2>
+          <p>Leia todos os dias, veja suas estatísticas e termine mais livros.</p>
+        </div>
+        <div class="goal-card">
+          <div class="goal-value" id="goal-value">3</div>
+          <div class="goal-label">livros concluídos</div>
+          <div class="goal-progress">
+            <div class="goal-progress-bar" id="goal-progress"></div>
+          </div>
+          <div class="goal-caption">Meta 6 livros este ano</div>
+        </div>
+      </section>
+
+      <div id="shelves" class="shelves"></div>
+    </main>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

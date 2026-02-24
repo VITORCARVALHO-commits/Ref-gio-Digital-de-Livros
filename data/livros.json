@@ -30,6 +30,7 @@
     "author": "Vitor Carvalho",
     "description": "A humanidade é um código em execução.\r\nCada vida é uma função temporária.\r\nCada erro, uma atualização.\r\nE cada pensamento, um eco do programador original.",
     "coverImage": "/uploads/1763153477003-60544632.png",
+    "requiresLogin": true,
     "chapters": [
       {
         "id": "1763153477026",
@@ -49,6 +50,7 @@
     "author": "Vitor Carvalho",
     "description": "A inversão silenciosa entre humanidade e tecnologia",
     "coverImage": "/uploads/1764105286129-347221550.jpeg",
+    "requiresLogin": true,
     "chapters": [
       {
         "id": "1764105286169",
