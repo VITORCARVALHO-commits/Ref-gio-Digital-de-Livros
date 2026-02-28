@@ -1,7 +1,7 @@
 const express = require('express');
 const { readJson, writeJson } = require('../lib/storage');
 const { upload } = require('../middleware/upload');
-const { livrosFile } = require('../config/paths');
+const { livrosFile, uploadsFile } = require('../config/paths');
 
 const router = express.Router();
 
@@ -13,9 +13,36 @@ function normalizeBook(book) {
   };
 }
 
+function getBookKey(book) {
+  return (book.title || '').trim().toLowerCase();
+}
+
+function dedupeBooks(books) {
+  const map = new Map();
+  books.forEach(book => {
+    const key = getBookKey(book);
+    if (!key) return;
+    const existing = map.get(key);
+    if (!existing) {
+      map.set(key, book);
+      return;
+    }
+    const existingDate = new Date(existing.createdAt || 0).getTime();
+    const currentDate = new Date(book.createdAt || 0).getTime();
+    if (currentDate >= existingDate) {
+      map.set(key, book);
+    }
+  });
+  return Array.from(map.values());
+}
+
 router.get('/livros.json', (req, res) => {
   const books = readJson(livrosFile, []).map(normalizeBook);
-  res.json(books);
+  const deduped = dedupeBooks(books);
+  if (deduped.length !== books.length) {
+    writeJson(livrosFile, deduped);
+  }
+  res.json(deduped);
 });
 
 router.get('/livros.json/:id', (req, res) => {
@@ -29,29 +56,62 @@ router.get('/livros.json/:id', (req, res) => {
   return res.json(book);
 });
 
-router.post('/livros.json', upload.single('coverImage'), (req, res) => {
-  const { title, author, description } = req.body;
+router.post('/livros.json', upload.fields([
+  { name: 'coverImage', maxCount: 1 },
+  { name: 'bookFile', maxCount: 1 }
+]), (req, res) => {
+  try {
+    console.log('[UPLOAD] body:', req.body);
+    console.log('[UPLOAD] files:', Object.keys(req.files || {}));
+    const { title, author, description } = req.body;
+    const coverFile = req.files?.coverImage?.[0] || null;
+    const bookFile = req.files?.bookFile?.[0] || null;
 
-  if (!title || !author) {
-    return res.status(400).json({ error: 'Título e autor obrigatórios' });
+    if (!title) {
+      return res.status(400).json({ error: 'Título obrigatório' });
+    }
+
+    if (!bookFile) {
+      return res.status(400).json({ error: 'Arquivo PDF obrigatório' });
+    }
+
+    const books = readJson(livrosFile, []).map(normalizeBook);
+    const titleKey = title.trim().toLowerCase();
+    if (books.some(b => getBookKey(b) === titleKey)) {
+      return res.status(409).json({ error: 'Livro já publicado com esse título' });
+    }
+    const newBook = {
+      id: Date.now().toString(),
+      title,
+      author: author?.trim() || 'Autor desconhecido',
+      description: description || '',
+      coverImage: coverFile ? `/uploads/${coverFile.filename}` : null,
+      pdfFile: bookFile ? `/uploads/${bookFile.filename}` : null,
+      chapters: [],
+      comments: {},
+      createdAt: new Date().toISOString()
+    };
+
+    books.push(newBook);
+    writeJson(livrosFile, books);
+
+    const uploads = readJson(uploadsFile, []);
+    const uploadKey = newBook.title.trim().toLowerCase();
+    const filteredUploads = uploads.filter(u => (u.title || '').trim().toLowerCase() !== uploadKey);
+    filteredUploads.push({
+      id: Date.now().toString(),
+      bookId: newBook.id,
+      title: newBook.title,
+      coverImage: newBook.coverImage,
+      pdfFile: newBook.pdfFile,
+      createdAt: newBook.createdAt
+    });
+    writeJson(uploadsFile, filteredUploads);
+
+    return res.status(201).json(newBook);
+  } catch (err) {
+    return res.status(500).json({ error: 'Falha ao salvar o livro' });
   }
-
-  const books = readJson(livrosFile, []).map(normalizeBook);
-  const newBook = {
-    id: Date.now().toString(),
-    title,
-    author,
-    description: description || '',
-    coverImage: req.file ? `/uploads/${req.file.filename}` : null,
-    chapters: [],
-    comments: {},
-    createdAt: new Date().toISOString()
-  };
-
-  books.push(newBook);
-  writeJson(livrosFile, books);
-
-  return res.status(201).json(newBook);
 });
 
 router.post('/livros.json/:id/capitulos', (req, res) => {

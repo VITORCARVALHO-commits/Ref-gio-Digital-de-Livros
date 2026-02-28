@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leitor | Refúgio Digital de Livros</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body class="reader-page">
+  <div class="reader-header">
+    <a href="/" class="font-semibold">← Voltar</a>
+    <h2 id="reader-title">Refúgio Digital de Livros</h2>
+    <button class="dark-mode-toggle" id="darkModeToggle">
+      <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg id="moonIcon" class="is-hidden" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="reader-container">
+    <!-- Sumário Lateral -->
+    <div class="sidebar is-hidden">
+      <h3>Páginas</h3>
+      <ul id="chapter-list" class="chapter-index"></ul>
+    </div>
+
+    <!-- Header do Livro -->
+    <div id="book-header-section" class="book-header is-hidden">
+      <div class="book-cover-reader">
+        <img id="book-cover" src="" alt="">
+      </div>
+      <div class="book-header-info">
+        <h1 id="book-title"></h1>
+        <p id="book-author"></p>
+        <p id="book-description"></p>
+      </div>
+    </div>
+
+    <!-- Cabeçalho do Capítulo -->
+    <div class="chapter-header">
+      <h1 id="chapter-title">Carregando...</h1>
+      <div class="meta">
+        <span id="book-info"></span>
+        <span id="chapter-number"></span>
+      </div>
+    </div>
+
+    <!-- Conteúdo de Leitura -->
+    <div id="chapter-content" class="reading-content">
+      <div id="pdf-container" class="pdf-container">
+        <canvas id="pdf-canvas"></canvas>
+      </div>
+      <p id="pdf-fallback">Carregando conteúdo...</p>
+    </div>
+
+    <!-- Navegação -->
+    <div class="navigation-buttons">
+      <button id="prev-chapter" class="nav-btn">
+        ← Página Anterior
+      </button>
+      <button id="next-chapter" class="nav-btn">
+        Próxima Página →
+      </button>
+    </div>
+
+    <!-- Comentários -->
+    <section class="comments-section">
+      <h2>Comentários (<span id="comment-count">0</span>)</h2>
+      <div id="comments-list" class="space-y-4 mb-8"></div>
+
+      <div class="comment-form">
+        <h3 class="comment-title">Deixe um comentário</h3>
+        <form id="comment-form">
+          <div class="form-group">
+            <textarea name="text" required rows="4" placeholder="Compartilhe seus pensamentos..."></textarea>
+          </div>
+          <div class="form-group">
+            <input type="text" name="userName" placeholder="Seu nome (opcional)">
+          </div>
+          <button type="submit" class="submit-btn">Publicar Comentário</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="js/reader.js"></script>
+</body>
+</html>

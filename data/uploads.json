@@ -1,0 +1,146 @@
+[
+  {
+    "id": "1772192494116",
+    "bookId": "1772192494115",
+    "title": "O Investidor Inteligente",
+    "coverImage": "/uploads/1772192494113-176962001.png",
+    "pdfFile": "/uploads/1772192494082-894000477.pdf",
+    "createdAt": "2026-02-27T11:41:34.115Z"
+  },
+  {
+    "id": "1772192839883",
+    "bookId": "1772192839883",
+    "title": "O Investidor Inteligente",
+    "coverImage": "/uploads/1772192839876-184759683.png",
+    "pdfFile": "/uploads/1772192839861-550914200.pdf",
+    "createdAt": "2026-02-27T11:47:19.883Z"
+  },
+  {
+    "id": "1772202130034",
+    "bookId": "1772202130033",
+    "title": "A garota do penhasco",
+    "coverImage": "/uploads/1772202130029-207759710.png",
+    "pdfFile": "/uploads/1772202130026-848873553.pdf",
+    "createdAt": "2026-02-27T14:22:10.033Z"
+  },
+  {
+    "id": "1772204133305",
+    "bookId": "1772204133305",
+    "title": "A Garota do Penhasco",
+    "coverImage": "/uploads/1772204133301-102746675.png",
+    "pdfFile": "/uploads/1772204133299-727650206.pdf",
+    "createdAt": "2026-02-27T14:55:33.305Z"
+  },
+  {
+    "id": "1772204135136",
+    "bookId": "1772204135135",
+    "title": "A Garota do Penhasco",
+    "coverImage": "/uploads/1772204135132-844219277.png",
+    "pdfFile": "/uploads/1772204135129-341403838.pdf",
+    "createdAt": "2026-02-27T14:55:35.135Z"
+  },
+  {
+    "id": "1772205033546",
+    "bookId": "1772205033545",
+    "title": "O Desejo",
+    "coverImage": "/uploads/1772205033539-369340957.png",
+    "pdfFile": "/uploads/1772205033537-5448397.pdf",
+    "createdAt": "2026-02-27T15:10:33.545Z"
+  },
+  {
+    "id": "1772270383753",
+    "bookId": "1772270383752",
+    "title": "O Alienista",
+    "coverImage": "/uploads/1772270383747-543935101.png",
+    "pdfFile": "/uploads/1772270383743-893393146.pdf",
+    "createdAt": "2026-02-28T09:19:43.752Z"
+  },
+  {
+    "id": "1772270601326",
+    "bookId": "1772270601325",
+    "title": "Paraíso Perdido",
+    "coverImage": "/uploads/1772270601322-177766467.png",
+    "pdfFile": "/uploads/1772270601318-574702380.pdf",
+    "createdAt": "2026-02-28T09:23:21.325Z"
+  },
+  {
+    "id": "1772276944068",
+    "bookId": "1772276944067",
+    "title": "O Cortiço",
+    "coverImage": "/uploads/1772276944064-966977645.png",
+    "pdfFile": "/uploads/1772276944058-698753959.pdf",
+    "createdAt": "2026-02-28T11:09:04.067Z"
+  },
+  {
+    "id": "1772277127270",
+    "bookId": "1772277127269",
+    "title": "A Arte da Guerra",
+    "coverImage": "/uploads/1772277127267-468484364.png",
+    "pdfFile": "/uploads/1772277127264-182890108.pdf",
+    "createdAt": "2026-02-28T11:12:07.269Z"
+  },
+  {
+    "id": "1772277622604",
+    "bookId": "1772277622603",
+    "title": "O Pequeno Príncipe",
+    "coverImage": "/uploads/1772277622600-214210669.png",
+    "pdfFile": "/uploads/1772277622596-78485167.pdf",
+    "createdAt": "2026-02-28T11:20:22.603Z"
+  },
+  {
+    "id": "1772277929067",
+    "bookId": "1772277929066",
+    "title": "A Roupa Nova",
+    "coverImage": "/uploads/1772277929063-430343134.png",
+    "pdfFile": "/uploads/1772277929062-509642795.pdf",
+    "createdAt": "2026-02-28T11:25:29.066Z"
+  },
+  {
+    "id": "1772278267568",
+    "bookId": "1772278267567",
+    "title": "A História dos Símbolos Nacionais",
+    "coverImage": "/uploads/1772278267566-275454036.png",
+    "pdfFile": "/uploads/1772278267546-779868742.pdf",
+    "createdAt": "2026-02-28T11:31:07.567Z"
+  },
+  {
+    "id": "1772278455219",
+    "bookId": "1772278455219",
+    "title": "O Menino e Seu Tamborzinho",
+    "coverImage": "/uploads/1772278455217-140952608.png",
+    "pdfFile": "/uploads/1772278455178-310767032.pdf",
+    "createdAt": "2026-02-28T11:34:15.219Z"
+  },
+  {
+    "id": "1772278593718",
+    "bookId": "1772278593718",
+    "title": "A Dignidade da Pessoa Humana",
+    "coverImage": "/uploads/1772278593715-906013533.png",
+    "pdfFile": "/uploads/1772278593712-611004468.pdf",
+    "createdAt": "2026-02-28T11:36:33.718Z"
+  },
+  {
+    "id": "1772278897382",
+    "bookId": "1772278897381",
+    "title": "Filosofia de Santo Agostinho",
+    "coverImage": "/uploads/1772278897379-290038284.png",
+    "pdfFile": "/uploads/1772278897374-851650790.pdf",
+    "createdAt": "2026-02-28T11:41:37.381Z"
+  },
+  {
+    "id": "1772279123193",
+    "bookId": "1772279123192",
+    "title": "Fábulas de Esopo",
+    "coverImage": "/uploads/1772279123189-940495690.png",
+    "pdfFile": "/uploads/1772279123175-64510167.pdf",
+    "createdAt": "2026-02-28T11:45:23.192Z"
+  },
+  {
+    "id": "1772279331262",
+    "bookId": "1772279331262",
+    "title": "Rei Lear",
+    "coverImage": "/uploads/1772279331260-733738939.png",
+    "pdfFile": "/uploads/1772279331258-120055794.pdf",
+    "createdAt": "2026-02-28T11:48:51.262Z"
+  }
+]

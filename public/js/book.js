@@ -12,6 +12,10 @@ async function loadBook() {
     book = livros.find(l => l.id === bookId);
     if (!book) return alert('Livro não encontrado');
 
+    const isPdfMode = Boolean(book.pdfFile || book.bookFile);
+    const hasChapters = Array.isArray(book.chapters) && book.chapters.length > 0;
+    const readerCapParam = isPdfMode ? '1' : (book.chapters[0]?.id || '');
+
     const bookDetail = document.getElementById('book-detail');
     bookDetail.innerHTML = `
       <div class="md:flex">
@@ -24,7 +28,7 @@ async function loadBook() {
           <h1 class="text-3xl font-serif font-bold text-gray-800 mb-2">${book.title}</h1>
           <p class="text-xl font-serif text-gray-600 mb-4">${book.author}</p>
           <div class="flex flex-wrap gap-4">
-            <a href="reader.html?id=${book.id}&cap=${book.chapters[0]?.id || ''}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center">
+            <a href="reader.html?id=${book.id}&cap=${readerCapParam}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center">
               <i data-feather="book-open" class="mr-2"></i> Ler Livro
             </a>
           </div>
@@ -36,22 +40,29 @@ async function loadBook() {
 
     const chaptersList = document.getElementById('chapters-list');
     chaptersList.innerHTML = '';
-    book.chapters.forEach(c => {
-      const div = document.createElement('div');
-      div.className = 'p-6 hover:bg-gray-50 transition-colors';
-      div.innerHTML = `
-        <div class="flex justify-between items-center">
-          <div>
-            <h3 class="font-medium text-gray-800">${c.title}</h3>
-            <p class="text-sm text-gray-500">Publicado em ${new Date(c.createdAt).toLocaleDateString()}</p>
+    if (hasChapters) {
+      book.chapters.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'p-6 hover:bg-gray-50 transition-colors';
+        div.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-medium text-gray-800">${c.title}</h3>
+              <p class="text-sm text-gray-500">Publicado em ${new Date(c.createdAt).toLocaleDateString()}</p>
+            </div>
+            <a href="reader.html?id=${book.id}&cap=${c.id}" class="text-indigo-600 hover:text-indigo-800 flex items-center">
+              Ler <i data-feather="chevron-right" class="ml-1 w-4 h-4"></i>
+            </a>
           </div>
-          <a href="reader.html?id=${book.id}&cap=${c.id}" class="text-indigo-600 hover:text-indigo-800 flex items-center">
-            Ler <i data-feather="chevron-right" class="ml-1 w-4 h-4"></i>
-          </a>
-        </div>
-      `;
+        `;
+        chaptersList.appendChild(div);
+      });
+    } else if (isPdfMode) {
+      const div = document.createElement('div');
+      div.className = 'p-6 text-gray-600';
+      div.textContent = 'Este livro está disponível em PDF (leitura página a página).';
       chaptersList.appendChild(div);
-    });
+    }
 
     await loadComments();
     feather.replace();
@@ -62,7 +73,11 @@ async function loadBook() {
 
 async function loadComments() {
   try {
-    const res = await fetch(`/comentarios/${bookId}/${book.chapters[0]?.id || ''}`);
+    const isPdfMode = Boolean(book.pdfFile || book.bookFile);
+    const commentKey = isPdfMode ? 'page-1' : (book.chapters[0]?.id || '');
+    if (!commentKey) return;
+
+    const res = await fetch(`/comentarios/${bookId}/${commentKey}`);
     const data = await res.json();
     const commentsList = document.getElementById('comments-list');
     commentsList.innerHTML = '';
@@ -103,7 +118,11 @@ document.getElementById('comment-form').addEventListener('submit', async e => {
   if (!text.trim()) return alert('Comentário não pode estar vazio.');
 
   try {
-    const res = await fetch(`/comentarios.json/${bookId}/${book.chapters[0]?.id || ''}`, {
+    const isPdfMode = Boolean(book.pdfFile || book.bookFile);
+    const commentKey = isPdfMode ? 'page-1' : (book.chapters[0]?.id || '');
+    if (!commentKey) return;
+
+    const res = await fetch(`/comentarios.json/${bookId}/${commentKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userName, text })

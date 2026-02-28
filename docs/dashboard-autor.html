@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="stylesheet" href="css/pages.css">
+      padding: 8px 12px;
+<body class="author-page">
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      color: var(--secondary);
+      margin-bottom: 24px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--light-gray);
+      padding: 32px;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 90%;
+      border: 1px solid #e5e5e7;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    html.dark-mode .modal-content {
+      border-color: #424245;
+    }
+
+    .modal-header {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--secondary);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e5e7;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--primary);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    html.dark-mode .form-group input,
+    html.dark-mode .form-group textarea {
+      border-color: #424245;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #0071e3;
+      box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
+    }
+
+    .revenue-chart {
+      background: var(--light-gray);
+      border: 1px solid #e5e5e7;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    html.dark-mode .revenue-chart {
+      border-color: #424245;
+    }
+
+    .chart-title {
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .chart-bars {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      height: 200px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: #0071e3;
+      border-radius: 4px 4px 0 0;
+      opacity: 0.7;
+    }
+
+    .chart-bar.active {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="books-app">
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="/" class="navbar-brand"><img class="logo-icon" src="/img/java-icon.png" alt="Java"> Refúgio Digital</a>
+    <div class="navbar-right">
+      <button class="user-menu" onclick="logout()">
+        👤 <span id="userName">Autor</span>
+        <span>⋮</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Painel do Autor</h1>
+      <p>Gerencie seus livros e visualize seus ganhos</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-label">Livros Publicados</div>
+        <div class="stat-value" id="booksCount">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">👀</div>
+        <div class="stat-label">Total de Leituras</div>
+        <div class="stat-value" id="readsCount">0</div>
+        <div class="stat-change">↑ 12% este mês</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">Ganhos Totais</div>
+        <div class="stat-value" id="earningsTotal">R$ 0</div>
+        <div class="stat-change">↑ 8% este mês</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💳</div>
+        <div class="stat-label">Ganhos Pendentes</div>
+        <div class="stat-value" id="earningsPending">R$ 0</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('livros')">📖 Meus Livros</button>
+      <button class="tab-btn" onclick="switchTab('ganhos')">💰 Ganhos</button>
+      <button class="tab-btn" onclick="switchTab('relatorios')">📊 Relatórios</button>
+      <button class="tab-btn" onclick="switchTab('configuracoes')">⚙️ Configurações</button>
+    </div>
+
+    <!-- Meus Livros -->
+    <div id="livros" class="tab-content active">
+      <div class="section-header">
+        <h2 class="section-title">Meus Livros</h2>
+        <button class="btn" onclick="openPublishModal()">+ Publicar Novo Livro</button>
+      </div>
+
+      <table class="books-table">
+        <thead>
+          <tr>
+            <th>Livro</th>
+            <th>Leituras</th>
+            <th>Ganhos</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="booksTable">
+          <tr>
+            <td colspan="5" class="table-empty">
+              <div class="empty-state empty-state--compact">
+                <div class="empty-state-icon">📚</div>
+                <h3>Nenhum livro publicado</h3>
+                <p>Publique seu primeiro livro para começar a ganhar</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Ganhos -->
+    <div id="ganhos" class="tab-content">
+      <h2 class="section-title section-title--spaced">Relatório de Ganhos</h2>
+
+      <div class="revenue-chart">
+        <div class="chart-title">Ganhos nos últimos 7 dias</div>
+        <div class="chart-bars">
+          <div class="chart-bar active h-60"></div>
+          <div class="chart-bar h-75"></div>
+          <div class="chart-bar h-45"></div>
+          <div class="chart-bar h-90"></div>
+          <div class="chart-bar h-55"></div>
+          <div class="chart-bar active h-80"></div>
+          <div class="chart-bar h-70"></div>
+        </div>
+      </div>
+
+      <table class="books-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Livro</th>
+            <th>Leituras</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody id="earningsTable">
+          <tr>
+            <td colspan="4" class="table-empty">Nenhuma transação registrada</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Relatórios -->
+    <div id="relatorios" class="tab-content">
+      <h2 class="section-title section-title--spaced">Relatórios Detalhados</h2>
+      <div class="report-grid">
+        <div class="report-card">
+          <div class="report-title">📈 Leituras por Dia</div>
+          <div class="report-value primary">245</div>
+          <p class="report-caption">Média de leituras diárias</p>
+        </div>
+
+        <div class="report-card">
+          <div class="report-title">⭐ Avaliação Média</div>
+          <div class="report-value accent">4.8</div>
+          <p class="report-caption">De 2.500 avaliações</p>
+        </div>
+
+        <div class="report-card">
+          <div class="report-title">👥 Seguidores</div>
+          <div class="report-value primary">1.240</div>
+          <p class="report-caption">Leitores seguindo seu perfil</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configurações -->
+    <div id="configuracoes" class="tab-content">
+      <h2 class="section-title section-title--spaced">Configurações de Pagamento</h2>
+      <div class="payment-card">
+        <div class="form-group">
+          <label>Banco</label>
+          <input type="text" placeholder="Nome do banco" value="Banco do Brasil">
+        </div>
+        <div class="form-group">
+          <label>Agência</label>
+          <input type="text" placeholder="Número da agência" value="0001">
+        </div>
+        <div class="form-group">
+          <label>Conta</label>
+          <input type="text" placeholder="Número da conta" value="••••••••">
+        </div>
+        <div class="form-group">
+          <label>CPF/CNPJ</label>
+          <input type="text" placeholder="CPF ou CNPJ" value="•••••••••••••••">
+        </div>
+        <button class="btn btn-full">Salvar Configurações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Publicação -->
+  <div class="modal" id="publishModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="modal-header">📖 Publicar Novo Livro</div>
+
+      <form id="publishForm" onsubmit="handlePublish(event)">
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" placeholder="Título do livro" required>
+        </div>
+
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea placeholder="Descrição e sinopse" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Capa</label>
+          <input type="file" accept="image/*" required>
+        </div>
+
+        <div class="form-group">
+          <label>Preço (R$)</label>
+          <input type="number" placeholder="9.90" step="0.01" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label>Primeiro Capítulo</label>
+          <textarea placeholder="Conteúdo do primeiro capítulo" rows="6" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-full">Publicar Livro</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/dashboard-autor.js"></script>
+</body>
+</html>

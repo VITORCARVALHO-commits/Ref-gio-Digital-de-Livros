@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil do Usuário | Refúgio Digital de Livros</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="profile-page">
+  <div class="profile-container">
+    <h1>Meu Perfil</h1>
+    <form id="profile-form">
+      <div class="form-group">
+        <label for="profileName">Nome</label>
+        <input type="text" id="profileName" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="profileEmail">Email</label>
+        <input type="email" id="profileEmail" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="profilePassword">Senha</label>
+        <input type="password" id="profilePassword" name="password" placeholder="Nova senha">
+      </div>
+      <div class="form-group">
+        <label for="profilePhoto">Foto de perfil</label>
+        <input type="file" id="profilePhoto" name="photo" accept="image/*">
+        <img id="profilePreview" src="" alt="Foto de perfil" style="max-width:120px;max-height:120px;margin-top:8px;display:none;">
+      </div>
+      <button type="submit" class="btn btn-primary">Salvar alterações</button>
+    </form>
+    <div class="profile-books">
+      <h2>Livros lidos</h2>
+      <ul id="booksRead"></ul>
+      <h2>Histórico de pesquisa</h2>
+      <ul id="searchHistory"></ul>
+    </div>
+  </div>
+  <script src="js/profile.js"></script>
+</body>
+</html>

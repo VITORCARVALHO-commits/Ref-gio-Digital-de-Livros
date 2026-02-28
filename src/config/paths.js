@@ -8,6 +8,7 @@ const uploadDir = path.join(publicDir, 'uploads');
 const livrosFile = path.join(dataDir, 'livros.json');
 const usersFile = path.join(dataDir, 'users.json');
 const activityFile = path.join(dataDir, 'activity.json');
+const uploadsFile = path.join(dataDir, 'uploads.json');
 
 module.exports = {
   rootDir,
@@ -16,5 +17,6 @@ module.exports = {
   uploadDir,
   livrosFile,
   usersFile,
-  activityFile
+  activityFile,
+  uploadsFile
 };

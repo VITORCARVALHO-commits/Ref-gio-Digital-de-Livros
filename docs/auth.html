@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autenticação | Refúgio Digital de Livros</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="books-app auth-page">
+  <div class="auth-container">
+    <!-- Login Form -->
+    <div id="loginForm" class="form-section">
+      <div class="auth-header">
+        <h1 class="auth-title icon-only"><img src="/img/java-icon.png" alt="Refúgio Digital"></h1>
+        <p>Bem-vindo de volta ao Refúgio Digital</p>
+      </div>
+
+      <div id="errorMsg" class="error"></div>
+
+      <form id="loginFormEl" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="sr-only" for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <label class="sr-only" for="loginPassword">Senha</label>
+          <input type="password" id="loginPassword" placeholder="Senha" required>
+        </div>
+        <!-- Botão de login removido -->
+      </form>
+
+      <div class="auth-toggle">
+        <p>Não tem conta?</p>
+        <a onclick="toggleForm()">Criar nova conta</a>
+      </div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" class="form-section form-hidden">
+      <div class="auth-header">
+        <h1 class="auth-title icon-only"><img src="/img/login-icon.png" alt="Criar Conta"></h1>
+      </div>
+      <div id="errorMsg2" class="error"></div>
+
+      <form id="signupFormEl" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label for="signupName">Nome Completo</label>
+          <input type="text" id="signupName" placeholder="Seu nome" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupEmail">Email</label>
+          <input type="email" id="signupEmail" placeholder="seu@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPassword">Senha</label>
+          <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" required>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">Concordo com os <a href="#" onclick="return false">Termos de Uso</a></label>
+        </div>
+
+        <button type="submit" class="btn-submit" aria-label="Criar Conta">
+          <img class="btn-icon" src="/img/login-icon.png" alt="">
+          <span class="sr-only">Criar Conta</span>
+        </button>
+      </form>
+
+      <div class="auth-toggle">
+        <p>Já tem conta?</p>
+        <a onclick="toggleForm()">Fazer login</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

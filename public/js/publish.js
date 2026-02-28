@@ -20,23 +20,60 @@ darkModeToggle.addEventListener('click', () => {
   moonIcon.style.display = isNowDark ? 'block' : 'none';
 });
 
-// Preview da capa
-const coverInput = document.getElementById('cover');
+// Preview da capa via PDF (primeira página)
+const pdfInput = document.getElementById('book-pdf');
 const coverPreview = document.getElementById('cover-preview');
-let selectedFile = null;
+const pdfInfo = document.getElementById('pdf-info');
+let selectedPdf = null;
+let coverBlob = null;
 
-coverInput.addEventListener('change', e => {
+const pdfjsLib = window.pdfjsLib;
+if (pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+function resetPdfPreview() {
+  coverPreview.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>';
+  pdfInfo.textContent = 'Nenhum arquivo selecionado.';
+  coverBlob = null;
+}
+
+pdfInput.addEventListener('change', async e => {
   const file = e.target.files[0];
-  selectedFile = file || null;
+  selectedPdf = file || null;
 
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      coverPreview.innerHTML = `<img src="${reader.result}" alt="Preview da Capa">`;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    coverPreview.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>';
+  if (!file) {
+    resetPdfPreview();
+    return;
+  }
+
+  try {
+    if (!pdfjsLib) {
+      pdfInfo.textContent = 'Prévia do PDF indisponível.';
+      return;
+    }
+    pdfInfo.textContent = 'Gerando prévia da capa...';
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 1.5 });
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({ canvasContext: context, viewport }).promise;
+
+    coverPreview.innerHTML = '';
+    coverPreview.appendChild(canvas);
+    pdfInfo.textContent = `${file.name} • ${pdf.numPages} páginas`;
+
+    coverBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+  } catch (err) {
+    console.error('Erro ao gerar capa do PDF:', err);
+    resetPdfPreview();
+    alert('Não foi possível gerar a prévia da capa. Verifique o PDF.');
   }
 });
 
@@ -48,12 +85,25 @@ publishForm.addEventListener('submit', async e => {
   e.preventDefault();
 
   try {
+    const pdfFile = selectedPdf || pdfInput.files?.[0];
+    if (!pdfFile) {
+      alert('Selecione um PDF para publicar o livro.');
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('title', document.getElementById('title').value.trim());
+    const titleValue = document.getElementById('title').value.trim();
+    if (!titleValue) {
+      alert('Informe o título do livro.');
+      return;
+    }
+    formData.append('title', titleValue);
     formData.append('author', document.getElementById('author').value.trim());
-    formData.append('description', document.getElementById('synopsis').value.trim());
-    if (selectedFile) {
-      formData.append('coverImage', selectedFile);
+    formData.append('description', '');
+    formData.append('category', document.getElementById('category').value);
+    formData.append('bookFile', pdfFile);
+    if (coverBlob) {
+      formData.append('coverImage', coverBlob, 'cover.png');
     }
 
     const bookRes = await fetch('/livros.json', {
@@ -61,19 +111,23 @@ publishForm.addEventListener('submit', async e => {
       body: formData
     });
 
-    if (!bookRes.ok) throw new Error('Erro ao criar livro');
-    const newBook = await bookRes.json();
-
-    const chapterRes = await fetch(`/livros.json/${newBook.id}/capitulos`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: document.getElementById('chapter-title').value.trim(),
-        content: document.getElementById('chapter-content').value.trim()
-      })
-    });
-
-    if (!chapterRes.ok) throw new Error('Erro ao adicionar capítulo');
+    if (!bookRes.ok) {
+      let message = 'Erro ao criar livro';
+      const clone = bookRes.clone();
+      try {
+        const errorData = await bookRes.json();
+        if (errorData?.error) message = errorData.error;
+      } catch (err) {
+        try {
+          const errorText = await clone.text();
+          if (errorText) message = errorText;
+        } catch (errText) {
+          // ignore
+        }
+      }
+      console.error('Falha ao publicar:', bookRes.status, message);
+      throw new Error(message);
+    }
 
     successMessage.classList.add('show');
     setTimeout(() => {
@@ -81,17 +135,13 @@ publishForm.addEventListener('submit', async e => {
     }, 2000);
   } catch (err) {
     console.error('Erro:', err);
-    alert('Erro ao publicar livro');
+    alert(err?.message || 'Erro ao publicar livro');
   }
 });
 
 document.getElementById('save-draft').addEventListener('click', () => {
   const data = {
-    title: document.getElementById('title').value,
-    author: document.getElementById('author').value,
-    synopsis: document.getElementById('synopsis').value,
-    chapterTitle: document.getElementById('chapter-title').value,
-    chapterContent: document.getElementById('chapter-content').value
+    title: document.getElementById('title').value
   };
   localStorage.setItem('bookDraft', JSON.stringify(data));
   alert('Rascunho salvo!');
@@ -101,8 +151,5 @@ const draft = localStorage.getItem('bookDraft');
 if (draft) {
   const data = JSON.parse(draft);
   document.getElementById('title').value = data.title || '';
-  document.getElementById('author').value = data.author || '';
-  document.getElementById('synopsis').value = data.synopsis || '';
-  document.getElementById('chapter-title').value = data.chapterTitle || '';
-  document.getElementById('chapter-content').value = data.chapterContent || '';
+  // Autor e sinopse removidos do formulário
 }

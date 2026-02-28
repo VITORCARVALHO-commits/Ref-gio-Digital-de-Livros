@@ -34,7 +34,7 @@
   <div class="reader-container">
     <!-- Sumário Lateral -->
     <div class="sidebar is-hidden">
-      <h3>Capítulos</h3>
+      <h3>Páginas</h3>
       <ul id="chapter-list" class="chapter-index"></ul>
     </div>
 
@@ -61,16 +61,19 @@
 
     <!-- Conteúdo de Leitura -->
     <div id="chapter-content" class="reading-content">
-      <p>Carregando conteúdo...</p>
+      <div id="pdf-container" class="pdf-container">
+        <canvas id="pdf-canvas"></canvas>
+      </div>
+      <p id="pdf-fallback">Carregando conteúdo...</p>
     </div>
 
     <!-- Navegação -->
     <div class="navigation-buttons">
       <button id="prev-chapter" class="nav-btn">
-        ← Capítulo Anterior
+        ← Página Anterior
       </button>
       <button id="next-chapter" class="nav-btn">
-        Próximo Capítulo →
+        Próxima Página →
       </button>
     </div>
 
@@ -94,6 +97,7 @@
     </section>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="js/reader.js"></script>
 </body>
 </html>

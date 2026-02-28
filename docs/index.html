@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refúgio Digital de Livros</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="books-app home-page">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo"><img class="logo-icon" src="/img/java-icon.png" alt="Java"> <span class="sidebar-brand">Refúgio Digital</span><span class="sidebar-page-title">Início</span></div>
+        <label class="sidebar-search">
+          <span>🔍</span>
+          <input id="book-search" type="search" placeholder="Buscar" aria-label="Buscar livros">
+        </label>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Biblioteca</div>
+          <a class="sidebar-item active" href="/"><span class="sidebar-icon"></span>Início</a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Coleções</div>
+          <button class="sidebar-item sidebar-button" type="button" id="collection-popular"><span class="sidebar-icon"></span>Mais lidos</button>
+          <div id="collections-list"></div>
+          <button class="sidebar-item sidebar-button" type="button" id="collection-new"><span class="sidebar-icon"></span>+ Nova Coleção</button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">✨</div>
+          <div>
+            <div class="sidebar-user-name">Bem-vindo</div>
+            <button class="sidebar-ghost" type="button" id="toggle-theme">Alternar modo</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="mobile-brand" aria-label="Refúgio Digital de Livros">
+        <img class="logo-icon" src="/img/java-icon.png" alt="Refúgio Digital de Livros">
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menu">☰</button>
+      <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
+      <section class="hero-panel" id="hero-panel">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">Refúgio Digital de Livros</div>
+          <h1 class="hero-title" id="hero-title">Descubra histórias incríveis</h1>
+          <p class="hero-subtitle" id="hero-subtitle">Uma biblioteca com livros selecionados para inspirar sua próxima leitura.</p>
+          <div class="hero-actions">
+            <a id="hero-link" class="hero-button" href="/dashboard.html">Minha Biblioteca</a>
+          </div>
+        </div>
+        <div class="hero-cover" id="hero-cover"></div>
+      </section>
+
+      <div id="shelves" class="shelves"></div>
+    </main>
+  </div>
+
+  <script src="js/index.js"></script>
+</body>
+</html>

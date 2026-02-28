@@ -47,19 +47,28 @@
           <label for="title">Título do Livro *</label>
           <input type="text" id="title" name="title" placeholder="Digite o título do seu livro" required>
         </div>
-
         <div class="form-group">
           <label for="author">Nome do Autor *</label>
-          <input type="text" id="author" name="author" placeholder="Seu nome ou pseudônimo" required>
+          <input type="text" id="author" name="author" placeholder="Digite o nome do autor" required>
         </div>
-
         <div class="form-group">
-          <label for="synopsis">Sinopse *</label>
-          <textarea id="synopsis" name="synopsis" placeholder="Escreva uma breve descrição do seu livro" required></textarea>
+          <label for="category">Categoria *</label>
+          <select id="category" name="category" required>
+            <option value="">Selecione uma categoria</option>
+            <option value="Mistério">Mistério</option>
+            <option value="Romance">Romance</option>
+            <option value="Aventura">Aventura</option>
+            <option value="Fantasia">Fantasia</option>
+            <option value="Drama">Drama</option>
+            <option value="Terror">Terror</option>
+            <option value="Autoajuda">Autoajuda</option>
+            <option value="Negócios">Negócios</option>
+            <option value="Destaques da semana">Destaques da semana</option>
+            <option value="Outros">Outros</option>
+          </select>
         </div>
-
         <div class="form-group">
-          <label>Capa do Livro *</label>
+          <label>Arquivo do Livro (PDF) *</label>
           <div class="cover-upload">
             <div class="cover-preview" id="cover-preview">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -69,29 +78,13 @@
               </svg>
             </div>
             <div class="upload-area">
-              <input type="file" id="cover" name="coverImage" accept="image/*" class="upload-input" required>
-              <p class="upload-hint">JPG, PNG ou WebP (máx. 5MB)</p>
+              <input type="file" id="book-pdf" name="bookFile" accept="application/pdf" class="upload-input" required>
+              <p class="upload-hint">PDF único (máx. 30MB). A capa será gerada da 1ª página.</p>
+              <p class="upload-hint" id="pdf-info">Nenhum arquivo selecionado.</p>
             </div>
           </div>
         </div>
       </form>
-    </section>
-
-    <!-- Seção: Primeiro Capítulo -->
-    <section class="form-section">
-      <h2>Primeiro Capítulo</h2>
-      <div class="form-group">
-        <label for="chapter-title">Título do Capítulo *</label>
-        <input type="text" id="chapter-title" name="chapterTitle" placeholder="ex: Capítulo 1: O Começo" required>
-      </div>
-      <div class="form-group">
-        <label for="chapter-content">Conteúdo do Capítulo *</label>
-        <textarea id="chapter-content" name="chapterContent" placeholder="Escreva o conteúdo do capítulo aqui..." required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="publish-date">Data de Publicação</label>
-        <input type="date" id="publish-date" name="publishDate">
-      </div>
     </section>
 
     <!-- Botões -->
@@ -119,21 +112,7 @@
 
   <script src="components/navbar.js"></script>
   <script src="components/footer.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="js/publish.js"></script>
-</body>
-</html>
-    if (draft) {
-        publishForm.title.value = draft.title || '';
-        publishForm.subtitle.value = draft.subtitle || '';
-        publishForm.author.value = draft.author || '';
-        publishForm.synopsis.value = draft.synopsis || '';
-        publishForm.chapterTitle.value = draft.chapterTitle || '';
-        publishForm.chapterContent.value = draft.chapterContent || '';
-        publishForm.publishDate.value = draft.publishDate || '';
-    }
-});
-</script>
-
-
 </body>
 </html>

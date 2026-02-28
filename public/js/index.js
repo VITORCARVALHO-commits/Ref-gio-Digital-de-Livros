@@ -59,10 +59,11 @@ function logActivity(type, payload) {
 }
 
 function getBookLink(book) {
+  const readerPath = `/reader.html?id=${book.id}`;
   if (book.requiresLogin && !authToken) {
-    return `/auth.html?redirect=${encodeURIComponent(`/ler.html?id=${book.id}`)}`;
+    return `/auth.html?redirect=${encodeURIComponent(readerPath)}`;
   }
-  return `/ler.html?id=${book.id}`;
+  return readerPath;
 }
 
 function createShelfSection(config) {
@@ -90,11 +91,11 @@ function bookTile(book) {
     <div class="book-tile">
       <a class="book-cover-link" href="${getBookLink(book)}" aria-label="Abrir ${book.title}">
         <div class="book-cover">
-          <img src="${book.coverImage || 'https://images.unsplash.com/photo-1543002588-d4d28bde5205?w=300&h=400&fit=crop'}" alt="${book.title}">
+          <img src="${book.coverImage || 'https://images.unsplash.com/photo-1543002588-d4d28bde5205?w=300&h=400&fit=crop'}" alt="${book.title}" style="object-fit:contain;width:100%;height:100%;background:#fff;">
         </div>
         <div class="book-tile-meta">
           <div class="book-title">${book.title}</div>
-          <div class="book-author">${book.author}</div>
+          <div class="book-author">${book.author || 'Autor desconhecido'}</div>
         </div>
       </a>
     </div>
@@ -109,7 +110,7 @@ function renderHero(book) {
 
   if (!book) return;
   heroTitle.textContent = book.title;
-  heroSubtitle.textContent = book.description || `Por ${book.author}`;
+  heroSubtitle.textContent = book.description || `Por ${book.author || 'Autor desconhecido'}`;
   heroLink.href = getBookLink(book);
   heroLink.textContent = 'Ler agora';
   heroCover.innerHTML = `
@@ -136,7 +137,14 @@ function renderShelves(books) {
     const section = createShelfSection(config);
     shelvesRoot.appendChild(section);
     const target = section.querySelector(`#shelf-${config.id}`);
-    const shelfBooks = getShelfBooks(books, 10, index * 3);
+    let shelfBooks = getShelfBooks(books, 10, index * 3);
+    // Remover duplicados por título em todas as prateleiras
+    const seen = new Set();
+    shelfBooks = shelfBooks.filter(book => {
+      if (seen.has(book.title)) return false;
+      seen.add(book.title);
+      return true;
+    });
     target.innerHTML = shelfBooks.map(bookTile).join('');
   });
 }
@@ -200,7 +208,7 @@ if (searchInput) {
   searchInput.addEventListener('input', () => {
     const term = searchInput.value.trim().toLowerCase();
     const filtered = term
-      ? cachedBooks.filter(book => `${book.title} ${book.author}`.toLowerCase().includes(term))
+      ? cachedBooks.filter(book => `${book.title} ${book.author || ''}`.toLowerCase().includes(term))
       : cachedBooks;
     renderShelves(filtered);
     attachShelfControls();
@@ -233,4 +241,63 @@ if (newCollectionBtn) {
     localStorage.setItem(collectionsKey, JSON.stringify(collections));
     renderCollections();
   });
+}
+
+// Redireciona usuário logado para dashboard
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+if (user && user.name && window.location.pathname === '/index.html') {
+  window.location.href = '/dashboard.html';
+}
+
+// Exibe menu correto conforme login
+function renderMenu() {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const nav = document.querySelector('.sidebar-nav');
+  if (!nav) return;
+  if (user && user.name) {
+    // Usuário logado: mostra menu completo
+    nav.innerHTML = `
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Biblioteca</div>
+        <a class="sidebar-item active" href="/dashboard.html"><span class="sidebar-icon"></span>Início</a>
+        <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Minha Biblioteca</a>
+        <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Quero Ler</a>
+        <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Concluídos</a>
+        <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Audiolivros</a>
+        <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>PDFs</a>
+        <a class="sidebar-item" href="/dashboard.html"><span class="sidebar-icon"></span>Minhas Amostras</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Minhas Coleções</div>
+        <button class="sidebar-item sidebar-button" type="button" id="collection-popular"><span class="sidebar-icon"></span>Mais lidos</button>
+        <div id="collections-list"></div>
+        <button class="sidebar-item sidebar-button" type="button" id="collection-new"><span class="sidebar-icon"></span>+ Nova Coleção</button>
+      </div>
+    `;
+  } else {
+    // Visitante: menu reduzido
+    nav.innerHTML = `
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Biblioteca</div>
+        <a class="sidebar-item active" href="/"><span class="sidebar-icon"></span>Início</a>
+
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Coleções</div>
+        <button class="sidebar-item sidebar-button" type="button" id="collection-popular"><span class="sidebar-icon"></span>Mais lidos</button>
+        <div id="collections-list"></div>
+        <button class="sidebar-item sidebar-button" type="button" id="collection-new"><span class="sidebar-icon"></span>+ Nova Coleção</button>
+      </div>
+    `;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderMenu);
+
+updateMenuLoginState();
+
+// Exibe 'Minha Biblioteca' só se logado
+const minhaBibliotecaMenu = document.getElementById('minhaBibliotecaMenu');
+if (minhaBibliotecaMenu && user && user.name) {
+  minhaBibliotecaMenu.style.display = '';
 }
